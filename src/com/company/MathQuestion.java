@@ -13,9 +13,11 @@ public class MathQuestion {
     private static int questionCount = 1;
     private int Answer = 0;
     private int choiceAns = 0;
+    private String choiceKey = "";
     private ArrayList<Integer> wrongChoice;
     private ArrayList<Integer> correctChoice;
-
+    private String getKey = "";
+    private boolean byPass = false;
     public MathQuestion() {
 
         System.out.println("MANUAL");
@@ -23,9 +25,7 @@ public class MathQuestion {
         System.out.println("Level 1 is the easiest, 9 is the hardest level available.");
         System.out.println("choose level you want to play (1 - 4)");
         Scanner scanner = new Scanner(System.in);
-        setLv = scanner.nextInt();
-        scanner.close();
-        setLEVEL(setLv);
+        setLEVEL(scanner.nextInt());
     }
 
     public int getLEVEL() {
@@ -104,14 +104,24 @@ public class MathQuestion {
         this.correctChoice = correctChoice;
     }
 
+    public String getChoiceKey() {
+        return choiceKey;
+    }
+
+    public String getGetKey() {
+        return getKey;
+    }
+
+    public void setGetKey(String getKey) {
+        this.getKey = getKey;
+    }
+
+    public void setChoiceKey(String choiceKey) {
+        this.choiceKey = choiceKey;
+    }
+
     public void setLEVEL(int setLv) {
-        if(setLv > 4){
-            setLv = 4;
-        }
-        else if (setLv < 1){
-            setLv = 1;
-        }
-        this.Level = setLv;
+        this.Level = checkValidChoice1to4(setLv);
         System.out.println("level set[OK]");
         setBounding();
     }
@@ -183,12 +193,6 @@ public class MathQuestion {
     }
     public void printChoice(){
 
-        // clear cmd
-        for(int clear = 0; clear < 1000; clear++)
-        {
-            System.out.println("\b") ;
-        }
-
         /**
         Question pattern:
         Q(n): From the following number have summing result = XXX ?
@@ -198,12 +202,13 @@ public class MathQuestion {
         (b). RandomNum_5, RandomNum_6
          */
         System.out.println("\nQ("+questionCount+"): From the following number, which have sum result = "+ Answer +" ?");
-        //get correct choice ?
+        questionCount++;
         char c = 'a';
         for (int i = 0; i < 3; i++){
             if(i == this.choiceAns){
                 System.out.print("("+c+"). "+this.correctChoice.get(0) + ", ");
                 System.out.print(this.correctChoice.get(1) + "\n");
+                manualCastCharToString(c);
                 c++;
             }
             System.out.print("("+c+"). "+this.wrongChoice.get(i + i) + ", ");
@@ -212,38 +217,120 @@ public class MathQuestion {
         }
         System.out.println("\n");
         System.out.println("generate choice [Done]");
+        genMathQuestion();
+    }
+
+    public void castIntToChar(){
+        if (this.getChoiceAns() == 1) this.setChoiceKey("a");
+        else if (this.getChoiceAns() == 2) this.setChoiceKey("b");
+        else if (this.getChoiceAns() == 3) this.setChoiceKey("c");
+        else this.setChoiceKey("d");
+    }
+    private void manualCastCharToString(char cc){
+       if (cc == 'a') setChoiceKey("a");
+       else if (cc == 'b') setChoiceKey("b");
+       else if (cc == 'c') setChoiceKey("c");
+       else if (cc == 'd') setChoiceKey("d");
+    }
+
+    private int checkValidChoice1to4(int ch){
+        boolean valid = false;
+        Scanner temp = new Scanner(System.in);
+        while (!valid){
+            if (ch < 1 || ch > 4) {
+                System.out.println("Invalid choice!, (1-4)?: ");
+                ch = temp.nextInt();
+            }
+            else {
+                valid = true;
+            }
+        }
+        return ch;
+    }
+
+    private String checkValidChoiceAtoD(String ch){
+        boolean valid = false;
+        Scanner temp = new Scanner(System.in);
+        while (!valid){
+            if (ch.isBlank() || ch.length() != 1) {
+                System.out.println("Invalid choice!, (A/a - D/d)?: ");
+                ch = temp.next();
+            }
+            else if (ch.equalsIgnoreCase("a") ||
+            ch.equalsIgnoreCase("b") ||
+            ch.equalsIgnoreCase("c") ||
+            ch.equalsIgnoreCase("d")){
+                valid = true;
+            }
+        }
+        return ch;
+    }
+    private String checkValidChoiceYN(String ch){
+        boolean valid = false;
+        Scanner temp = new Scanner(System.in);
+        while (!valid){
+            if (ch.isBlank() || ch.length() != 1) {
+                System.out.println("Invalid choice!, (Y/y, N/n)?: ");
+                ch = temp.next();
+            }
+            else if (ch.equalsIgnoreCase("y") ||
+                    ch.equalsIgnoreCase("n")){
+                valid = true;
+            }
+        }
+        return ch;
     }
 
     public void genMathQuestion(){
 
-        Random randNum = new Random();
-        int Q_sum = randNum.nextInt(this.lowerBound, this.upperBound);
-        int randChoiceCal = (int)(randNum.nextInt(Q_sum/4, Q_sum/2));
-
-        System.out.println("Q" + this.questionCount + ")" + "What're 2 number that have summing of " + Q_sum + "?");
-        for (char i = 'a'; i < 'e'; i++){
-            System.out.println("("+i+")");
-        }
-        System.out.println();
         Scanner scanner = new Scanner(System.in);
-        System.out.println("Number 1 :");
-        int n1 = scanner.nextInt();
-        System.out.println("Number 1 :");
-        int n2 = scanner.nextInt();
-
-        if((n1 + n2) == Q_sum ){
+        System.out.println("Your answer (A/a - d/D):");
+        boolean correctness = false;
+        String getKey = scanner.next();
+        while(!correctness) {
+            if (getKey.length() == 1){
+                if (getKey.toLowerCase().equals("a") ||
+                        getKey.toLowerCase().equals("b") ||
+                        getKey.toLowerCase().equals("c") ||
+                        getKey.toLowerCase().equals("d"))
+                {
+                    correctness = true;
+                }
+            }
+            if (!correctness){
+                System.out.println("Your answer is invalid, try again");
+                System.out.println("Your answer (A/a - d/D):");
+                getKey = scanner.nextLine();
+            }
+        }
+        if (getKey.equals(getChoiceKey())){
             System.out.println("Correct!, do you want to play again ? (Y/N)");
         }
         else {
             System.out.println("Wrong!, do you want to play again ? (Y/N)");
         }
+        getKey = scanner.next();
+        if (getKey.equalsIgnoreCase("y")){
+            System.out.println("You want to change question level ? (Y/N)");
+            getKey = scanner.next();
+            if (getKey.equalsIgnoreCase("y")){
+                System.out.println("choose level you want to play (1 - 4)");
+                this.setLv = scanner.nextInt();
+            }
+            genAnswer();
+        }
+         if (getKey.equalsIgnoreCase("n") && !this.byPass){
+             System.out.println("Bye!");
+             this.byPass = true;
+         }
 
-        String checkYN = scanner.next();
-        if (checkYN.toLowerCase().equalsIgnoreCase("y")){
-            System.out.println("Let's gooooo");
-        }
-        else {
-            System.out.println("The fuck ?");
-        }
+//
+//        String checkYN = scanner.next();
+//        if (checkYN.toLowerCase().equalsIgnoreCase("y")){
+//            System.out.println("Let's gooooo");
+//        }
+//        else {
+//            System.out.println("The fuck ?");
+//        }
     }
 }

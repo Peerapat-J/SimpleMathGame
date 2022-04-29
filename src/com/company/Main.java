@@ -18,6 +18,32 @@ public class Main {
 
         MathQuestion m = new MathQuestion();
 
+//        final Scanner scanner = new Scanner(System.in);
+//        System.out.println("Your answer (A/a - d/D):");
+//        boolean correctness = false;
+//        String getKey = scanner.nextLine();
+//        while(correctness != true) {
+//            if (getKey.length() == 1){
+//                if (getKey.toLowerCase().equals("a") ||
+//                getKey.toLowerCase().equals("b") ||
+//                getKey.toLowerCase().equals("c") ||
+//                getKey.toLowerCase().equals("d"))
+//                {
+//                    correctness = true;
+//                }
+//            }
+//            if (correctness == false){
+//                System.out.println("Your answer is invalid, try again");
+//                System.out.println("Your answer (A/a - d/D):");
+//                getKey = scanner.next();
+//            }
+//            char k = 'a';
+//            String a = "a";
+//            if (getKey.equals(k) || getKey.equals(a)){
+//                System.out.println("ok");
+//            }
+//
+//        }
         //        tryScanner mainScanner = new tryScanner();
 //        String sometext = mainScanner.getText();
 //        System.out.println(": " + sometext);
