@@ -6,18 +6,19 @@ import java.util.Scanner;
 //import jline.console.ConsoleReader;
 public class MathQuestion {
 
+    private boolean byPass = false;
     private int Level = 1;
     private int setLv = 1;
     private int upperBound = 199;
-    private int lowerBound = 10;
-    private static int questionCount = 1;
+    private int lowerBound = 100;
     private int Answer = 0;
     private int choiceAns = 0;
+    private static int questionCount = 1;
+    private String getKey = "";
     private String choiceKey = "";
     private ArrayList<Integer> wrongChoice;
     private ArrayList<Integer> correctChoice;
-    private String getKey = "";
-    private boolean byPass = false;
+
     public MathQuestion() {
 
         System.out.println("MANUAL");
@@ -28,99 +29,95 @@ public class MathQuestion {
         setLEVEL(scanner.next());
     }
 
-    public int getLEVEL() {
+    private int getLevel() {
         return Level;
     }
 
-    public int getLevel() {
-        return Level;
-    }
-
-    public void setLevel(int level) {
+    private void setLevel(int level) {
         Level = level;
     }
 
-    public int getSetLv() {
+    private int getSetLv() {
         return setLv;
     }
 
-    public void setSetLv(int setLv) {
+    private void setSetLv(int setLv) {
         this.setLv = setLv;
     }
 
-    public int getUpperBound() {
+    private int getUpperBound() {
         return upperBound;
     }
 
-    public void setUpperBound(int upperBound) {
+    private void setUpperBound(int upperBound) {
         this.upperBound = upperBound;
     }
 
-    public int getLowerBound() {
+    private int getLowerBound() {
         return lowerBound;
     }
 
-    public void setLowerBound(int lowerBound) {
+    private void setLowerBound(int lowerBound) {
         this.lowerBound = lowerBound;
     }
 
-    public static int getQuestionCount() {
+    private static int getQuestionCount() {
         return questionCount;
     }
 
-    public static void setQuestionCount(int questionCount) {
+    private static void setQuestionCount(int questionCount) {
         MathQuestion.questionCount = questionCount;
     }
 
-    public int getAnswer() {
+    private int getAnswer() {
         return Answer;
     }
 
-    public void setAnswer(int answer) {
+    private void setAnswer(int answer) {
         Answer = answer;
     }
 
-    public int getChoiceAns() {
+    private int getChoiceAns() {
         return choiceAns;
     }
 
-    public void setChoiceAns(int choiceAns) {
+    private void setChoiceAns(int choiceAns) {
         this.choiceAns = choiceAns;
     }
 
-    public ArrayList<Integer> getWrongChoice() {
+    private ArrayList<Integer> getWrongChoice() {
         return wrongChoice;
     }
 
-    public void setWrongChoice(ArrayList<Integer> wrongChoice) {
+    private void setWrongChoice(ArrayList<Integer> wrongChoice) {
         this.wrongChoice = wrongChoice;
     }
 
-    public ArrayList<Integer> getCorrectChoice() {
+    private ArrayList<Integer> getCorrectChoice() {
         return correctChoice;
     }
 
-    public void setCorrectChoice(ArrayList<Integer> correctChoice) {
+    private void setCorrectChoice(ArrayList<Integer> correctChoice) {
         this.correctChoice = correctChoice;
     }
 
-    public String getChoiceKey() {
+    private String getChoiceKey() {
         return choiceKey;
     }
 
-    public String getGetKey() {
+    private String getGetKey() {
         return getKey;
     }
 
-    public void setGetKey(String getKey) {
+    private void setGetKey(String getKey) {
         this.getKey = getKey;
     }
 
-    public void setChoiceKey(String choiceKey) {
+    private void setChoiceKey(String choiceKey) {
         this.choiceKey = choiceKey;
     }
 
-    public void setLEVEL(String setLv) {
+    private void setLEVEL(String setLv) {
         boolean valid = false;
         Scanner sc = new Scanner(System.in);
         while (!valid){
@@ -167,7 +164,7 @@ public class MathQuestion {
         genAnswer();
     }
 
-    public void genAnswer(){
+    private void genAnswer(){
         if(!this.byPass){
             Random randNum = new Random();
             this.Answer = randNum.nextInt(this.lowerBound, this.upperBound);
@@ -176,15 +173,14 @@ public class MathQuestion {
         }
     }
 
-    public void randomCorrectChoice(){
+    private void randomCorrectChoice(){
         Random random = new Random();
         this.choiceAns = random.nextInt(0, 3);
         System.out.println("defined correct choice [OK]");
         genWrongChoice();
     }
 
-    // set this method is set public for debugging.
-    public void genWrongChoice(){
+    private void genWrongChoice(){
 
         Random randObj = new Random();
         ArrayList<Integer> wrongChoiceTemp = new ArrayList<>();
@@ -206,7 +202,7 @@ public class MathQuestion {
         genCorrectChoice();
     }
 
-    public void genCorrectChoice(){
+    private void genCorrectChoice(){
         ArrayList<Integer> correctChoiceTemp = new ArrayList<>();
         Random randObj = new Random();
         int temp = (this.Answer / 2) - randObj.nextInt(6, 10);
@@ -218,8 +214,8 @@ public class MathQuestion {
         System.out.println("generate correct choice [OK]");
         printChoice();
     }
-    public void printChoice(){
 
+    private void printChoice(){
         /**
         Question pattern:
         Q(n): From the following number have summing result = XXX ?
@@ -247,7 +243,7 @@ public class MathQuestion {
         genMathQuestion();
     }
 
-    public void castIntToChar(){
+    private void castIntToChar(){
         if (this.getChoiceAns() == 1) this.setChoiceKey("a");
         else if (this.getChoiceAns() == 2) this.setChoiceKey("b");
         else if (this.getChoiceAns() == 3) this.setChoiceKey("c");
@@ -293,7 +289,7 @@ public class MathQuestion {
         return ch;
     }
 
-    public void genMathQuestion(){
+    private void genMathQuestion(){
 
         Scanner scanner = new Scanner(System.in);
         System.out.println("Your answer (A/a - d/D):");
@@ -322,4 +318,5 @@ public class MathQuestion {
              this.byPass = true;
          }
     }
+
 }
