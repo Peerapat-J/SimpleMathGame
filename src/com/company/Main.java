@@ -16,7 +16,7 @@ public class Main {
 
     public static void main(String[] args){
 
-        MathQuestion m = new MathQuestion();
+            MathQuestion m = new MathQuestion();
 
 //        final Scanner scanner = new Scanner(System.in);
 //        System.out.println("Your answer (A/a - d/D):");

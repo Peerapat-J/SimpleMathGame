@@ -25,7 +25,7 @@ public class MathQuestion {
         System.out.println("Level 1 is the easiest, 9 is the hardest level available.");
         System.out.println("choose level you want to play (1 - 4)");
         Scanner scanner = new Scanner(System.in);
-        setLEVEL(scanner.nextInt());
+        setLEVEL(scanner.next());
     }
 
     public int getLEVEL() {
@@ -120,8 +120,33 @@ public class MathQuestion {
         this.choiceKey = choiceKey;
     }
 
-    public void setLEVEL(int setLv) {
-        this.Level = checkValidChoice1to4(setLv);
+    public void setLEVEL(String setLv) {
+        boolean valid = false;
+        Scanner sc = new Scanner(System.in);
+        while (!valid){
+            if (setLv.equalsIgnoreCase("1") ||
+                    setLv.equalsIgnoreCase("2") ||
+                    setLv.equalsIgnoreCase("3") ||
+                    setLv.equalsIgnoreCase("4")){
+                valid = true;
+                if (setLv.equals("1")){
+                    this.Level = 1;
+                }
+                else if (setLv.equals("2")){
+                    this.Level = 2;
+                }
+                else if (setLv.equals("3")){
+                    this.Level = 3;
+                }
+                else if (setLv.equals("4")){
+                    this.Level = 4;
+                }
+            }
+            else {
+                System.out.println("Invalid level!, (1 - 4)?: ");
+                setLv = sc.next();
+            }
+        }
         System.out.println("level set[OK]");
         setBounding();
     }
@@ -143,10 +168,12 @@ public class MathQuestion {
     }
 
     public void genAnswer(){
-        Random randNum = new Random();
-        this.Answer = randNum.nextInt(this.lowerBound, this.upperBound);
-        System.out.println("generate answer [OK]");
-        randomCorrectChoice();
+        if(!this.byPass){
+            Random randNum = new Random();
+            this.Answer = randNum.nextInt(this.lowerBound, this.upperBound);
+            System.out.println("generate answer [OK]");
+            randomCorrectChoice();
+        }
     }
 
     public void randomCorrectChoice(){
@@ -233,34 +260,19 @@ public class MathQuestion {
        else if (cc == 'd') setChoiceKey("d");
     }
 
-    private int checkValidChoice1to4(int ch){
-        boolean valid = false;
-        Scanner temp = new Scanner(System.in);
-        while (!valid){
-            if (ch < 1 || ch > 4) {
-                System.out.println("Invalid choice!, (1-4)?: ");
-                ch = temp.nextInt();
-            }
-            else {
-                valid = true;
-            }
-        }
-        return ch;
-    }
-
     private String checkValidChoiceAtoD(String ch){
         boolean valid = false;
         Scanner temp = new Scanner(System.in);
         while (!valid){
-            if (ch.isBlank() || ch.length() != 1) {
-                System.out.println("Invalid choice!, (A/a - D/d)?: ");
-                ch = temp.next();
-            }
-            else if (ch.equalsIgnoreCase("a") ||
+            if (ch.equalsIgnoreCase("a") ||
             ch.equalsIgnoreCase("b") ||
             ch.equalsIgnoreCase("c") ||
             ch.equalsIgnoreCase("d")){
                 valid = true;
+            }
+            else {
+                System.out.println("Invalid choice!, (A/a - D/d)?: ");
+                ch = temp.next();
             }
         }
         return ch;
@@ -269,13 +281,13 @@ public class MathQuestion {
         boolean valid = false;
         Scanner temp = new Scanner(System.in);
         while (!valid){
-            if (ch.isBlank() || ch.length() != 1) {
-                System.out.println("Invalid choice!, (Y/y, N/n)?: ");
-                ch = temp.next();
-            }
-            else if (ch.equalsIgnoreCase("y") ||
+            if (ch.equalsIgnoreCase("y") ||
                     ch.equalsIgnoreCase("n")){
                 valid = true;
+            }
+            else{
+                System.out.println("Invalid choice!, (Y/y, N/n)?: ");
+                ch = temp.next();
             }
         }
         return ch;
@@ -286,36 +298,22 @@ public class MathQuestion {
         Scanner scanner = new Scanner(System.in);
         System.out.println("Your answer (A/a - d/D):");
         boolean correctness = false;
-        String getKey = scanner.next();
-        while(!correctness) {
-            if (getKey.length() == 1){
-                if (getKey.toLowerCase().equals("a") ||
-                        getKey.toLowerCase().equals("b") ||
-                        getKey.toLowerCase().equals("c") ||
-                        getKey.toLowerCase().equals("d"))
-                {
-                    correctness = true;
-                }
-            }
-            if (!correctness){
-                System.out.println("Your answer is invalid, try again");
-                System.out.println("Your answer (A/a - d/D):");
-                getKey = scanner.nextLine();
-            }
-        }
+        String getKey = checkValidChoiceAtoD(scanner.next());
         if (getKey.equals(getChoiceKey())){
             System.out.println("Correct!, do you want to play again ? (Y/N)");
         }
         else {
             System.out.println("Wrong!, do you want to play again ? (Y/N)");
         }
-        getKey = scanner.next();
+
+        getKey = checkValidChoiceYN(scanner.next());
         if (getKey.equalsIgnoreCase("y")){
             System.out.println("You want to change question level ? (Y/N)");
-            getKey = scanner.next();
+
+            getKey = checkValidChoiceYN(scanner.next());
             if (getKey.equalsIgnoreCase("y")){
                 System.out.println("choose level you want to play (1 - 4)");
-                this.setLv = scanner.nextInt();
+                setLEVEL(scanner.next());
             }
             genAnswer();
         }
@@ -323,14 +321,5 @@ public class MathQuestion {
              System.out.println("Bye!");
              this.byPass = true;
          }
-
-//
-//        String checkYN = scanner.next();
-//        if (checkYN.toLowerCase().equalsIgnoreCase("y")){
-//            System.out.println("Let's gooooo");
-//        }
-//        else {
-//            System.out.println("The fuck ?");
-//        }
     }
 }
